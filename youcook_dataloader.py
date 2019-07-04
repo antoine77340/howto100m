@@ -21,7 +21,6 @@ class Youcook_DataLoader(Dataset):
             we,
             we_dim=300,
             max_words=30,
-            n_pair=6,
     ):
         """
         Args:
@@ -31,13 +30,6 @@ class Youcook_DataLoader(Dataset):
         self.we_dim = we_dim
         self.max_words = max_words
         self.n_pair = n_pair
-        if self.n_pair > 1:
-            self.videos = defaultdict(list)
-            for i in range(len(self.data)):
-                video_id = self.data[i]['id'].split('_')
-                video_id = '_'.join(video_id[:-1])
-                self.videos[video_id].append(i)
-            self.unique_videos = list(self.videos.keys())
 
     def __len__(self):
         if self.n_pair > 1:
@@ -68,26 +60,9 @@ class Youcook_DataLoader(Dataset):
             return th.zeros(self.max_words, self.we_dim)
 
     def __getitem__(self, idx):
-        if self.n_pair > 1:
-            vid = self.unique_videos[idx]
-            ind = np.random.choice(self.videos[vid], size=self.n_pair, replace=True)
-            video = th.zeros(self.n_pair, 4096)
-            caption = th.zeros(self.n_pair, self.max_words, self.we_dim)
-
-
-        if self.n_pair > 1:
-            for i in range(self.n_pair):
-                idx_c = ind[i]
-                feat_2d = F.normalize(th.from_numpy(self.data[idx_c]['2d']).float(), dim=0)
-                feat_3d = F.normalize(th.from_numpy(self.data[idx_c]['3d']).float(), dim=0)
-                video[i] = th.cat((feat_2d, feat_3d))
-                cap = self.data[idx_c]['caption']
-                caption[i] = self._words_to_we(self._tokenize_text(cap))
-        else:
-            feat_2d = F.normalize(th.from_numpy(self.data[idx]['2d']).float(), dim=0)
-            feat_3d = F.normalize(th.from_numpy(self.data[idx]['3d']).float(), dim=0)
-            video = th.cat((feat_2d, feat_3d))
-            cap = self.data[idx]['caption']
-            caption = self._words_to_we(self._tokenize_text(cap))
-
+        feat_2d = F.normalize(th.from_numpy(self.data[idx]['2d']).float(), dim=0)
+        feat_3d = F.normalize(th.from_numpy(self.data[idx]['3d']).float(), dim=0)
+        video = th.cat((feat_2d, feat_3d))
+        cap = self.data[idx]['caption']
+        caption = self._words_to_we(self._tokenize_text(cap))
         return {'video': video, 'text': caption, 'video_id': self.data[idx]['id']}
