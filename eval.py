@@ -5,11 +5,7 @@ from __future__ import print_function
 
 import torch as th
 from torch.utils.data import DataLoader
-import numpy as np
 from args import get_args
-import random
-import os
-from youcook_dataloader import Youcook_DataLoader
 from model import Net
 from metrics import compute_metrics, print_computed_metrics
 from gensim.models.keyedvectors import KeyedVectors
@@ -17,18 +13,13 @@ import pickle
 import glob
 from lsmdc_dataloader import LSMDC_DataLoader
 from msrvtt_dataloader import MSRVTT_DataLoader
-
+from youcook_dataloader import Youcook_DataLoader
 
 args = get_args()
 if args.verbose:
     print(args)
 
 assert args.pretrain_path != '', 'Need to specify pretrain_path argument'
-
-# predefining random initial seeds
-th.manual_seed(args.seed)
-np.random.seed(args.seed)
-random.seed(args.seed)
 
 print('Loading word vectors: {}'.format(args.word2vec_path))
 we = KeyedVectors.load_word2vec_format(args.word2vec_path, binary=True)
@@ -41,7 +32,6 @@ if args.eval_youcook:
         we=we,
         max_words=args.max_words,
         we_dim=args.we_dim,
-        n_pair=1,
     )
     dataloader_val = DataLoader(
         dataset_val,
@@ -65,7 +55,7 @@ if args.eval_lsmdc:
     )
 if args.eval_msrvtt:
     msrvtt_testset = MSRVTT_DataLoader(
-        csv_path='/sequoia/data2/dataset/MSR-VTT_Dataset/test_sentences.csv',
+        csv_path=args.msrvtt_test_csv_path,
         features_path=args.msrvtt_test_features_path,
         we=we,
         max_words=args.max_words,
@@ -85,9 +75,7 @@ net = Net(
     max_words=args.max_words,
 )
 net.eval()
-# Optimizers + Loss
-if args.gpu_mode:
-    net.cuda()
+net.cuda()
 
 if args.verbose:
     print('Starting evaluation loop ...')
@@ -97,9 +85,9 @@ def Eval_msrvtt(model, eval_dataloader):
     print ('Evaluating Text-Video retrieval on MSRVTT data')
     with th.no_grad():
         for i_batch, data in enumerate(eval_dataloader):
-            text = data['text'].cuda() if args.gpu_mode else data['text']
+            text = data['text'].cuda()
             vid = data['video_id']
-            video = data['video'].cuda() if args.gpu_mode else data['video']
+            video = data['video'].cuda()
             m = model(video, text)
             m = m.cpu().detach().numpy()
             metrics = compute_metrics(m)
@@ -110,8 +98,8 @@ def Eval_lsmdc(model, eval_dataloader):
     print ('Evaluating Text-Video retrieval on LSMDC data')
     with th.no_grad():
         for i_batch, data in enumerate(eval_dataloader):
-            text = data['text'].cuda() if args.gpu_mode else data['text']
-            video = data['video'].cuda() if args.gpu_mode else data['video']
+            text = data['text'].cuda()
+            video = data['video'].cuda()
             vid = data['video_id']
             m = model(video, text)
             m = m.cpu().detach().numpy()
@@ -124,8 +112,8 @@ def Eval_youcook(model, eval_dataloader):
     print ('Evaluating Text-Video retrieval on Youcook data')
     with th.no_grad():
         for i_batch, data in enumerate(eval_dataloader):
-            text = data['text'].cuda() if args.gpu_mode else data['text']
-            video = data['video'].cuda() if args.gpu_mode else data['video']
+            text = data['text'].cuda()
+            video = data['video'].cuda()
             vid = data['video_id']
             m = model(video, text)
             m  = m.cpu().detach().numpy()

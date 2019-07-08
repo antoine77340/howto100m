@@ -29,13 +29,9 @@ class Youcook_DataLoader(Dataset):
         self.we = we
         self.we_dim = we_dim
         self.max_words = max_words
-        self.n_pair = n_pair
 
     def __len__(self):
-        if self.n_pair > 1:
-            return len(self.unique_videos)
-        else:
-            return len(self.data)
+        return len(self.data)
 
     def custom_collate(self, batch):
         return default_collate(batch)

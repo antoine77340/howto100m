@@ -48,7 +48,6 @@ if args.youcook:
         we=we,
         max_words=args.max_words,
         we_dim=args.we_dim,
-        n_pair=args.n_pair,
     )
 elif args.msrvtt:
     dataset = MSRVTT_TrainDataLoader(
@@ -105,8 +104,8 @@ if args.eval_youcook:
     )
 if args.eval_lsmdc:
     dataset_lsmdc = LSMDC_DataLoader(
-        csv_path=args.lsmdc_val_csv_path,
-        features_path=args.lsmdc_val_features_path,
+        csv_path=args.lsmdc_test_csv_path,
+        features_path=args.lsmdc_test_features_path,
         we=we,
         max_words=args.max_words,
         we_dim=args.we_dim,
