@@ -69,7 +69,7 @@ elif args.lsmdc:
 else:
     dataset = Youtube_DataLoader(
         csv=args.train_csv,
-        features_path=args.features_path,
+        features_path=args.features_path_2D,
         features_path_3D=args.features_path_3D,
         caption=caption,
         min_time=args.min_time,
