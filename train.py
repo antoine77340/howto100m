@@ -181,7 +181,6 @@ def Eval_retrieval(model, eval_dataloader, dataset_name):
         for i_batch, data in enumerate(eval_dataloader):
             text = data['text'].cuda()
             video = data['video'].cuda()
-            vid = data['video_id']
             m = model(video, text)
             m  = m.cpu().detach().numpy()
             metrics = compute_metrics(m)

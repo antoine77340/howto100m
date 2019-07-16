@@ -100,11 +100,8 @@ for c in all_checkpoints:
     print('Loading checkpoint: {}'.format(c))
     net.load_checkpoint(c)
     if args.eval_youcook:
-        #Eval_youcook(net, dataloader_val)
         Eval_retrieval(net, dataloader_val, 'YouCook2')
     if args.eval_msrvtt:
-        #Eval_msrvtt(net, dataloader_msrvtt)
         Eval_retrieval(net, dataloader_msrvtt, 'MSR-VTT')
     if args.eval_lsmdc:
-        #Eval_lsmdc(net, dataloader_lsmdc)
         Eval_retrieval(net, dataloader_lsmdc, 'LSMDC')
