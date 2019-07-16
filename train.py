@@ -20,7 +20,6 @@ import pickle
 from msrvtt_dataloader import MSRVTT_DataLoader, MSRVTT_TrainDataLoader
 from lsmdc_dataloader import LSMDC_DataLoader
 
-
 args = get_args()
 if args.verbose:
     print(args)
@@ -175,51 +174,27 @@ def TrainOneBatch(model, opt, data, loss_fun):
     opt.step()
     return loss.item()
 
-
-def Eval_msrvtt(model, eval_dataloader):
+def Eval_retrieval(model, eval_dataloader, dataset_name):
     model.eval()
-    print ('Evaluating Text-Video retrieval on MSRVTT data')
+    print('Evaluating Text-Video retrieval on {} data'.format(dataset_name))
     with th.no_grad():
         for i_batch, data in enumerate(eval_dataloader):
             text = data['text'].cuda()
             video = data['video'].cuda()
+            vid = data['video_id']
             m = model(video, text)
-            metrics = compute_metrics(m.cpu().detach().numpy())
+            m  = m.cpu().detach().numpy()
+            metrics = compute_metrics(m)
             print_computed_metrics(metrics)
-    model.train()
-
-def Eval_lsmdc(model, eval_dataloader):
-    model.eval()
-    print ('Evaluating Text-Video retrieval on LSMDC data')
-    with th.no_grad():
-        for i_batch, data in enumerate(eval_dataloader):
-            text = data['text'].cuda()
-            video = data['video'].cuda()
-            m = model(video, text)
-            metrics = compute_metrics(m.cpu().detach().numpy())
-            print_computed_metrics(metrics)
-    model.train()
-
-def Eval_youcook(model, eval_dataloader):
-    model.eval()
-    print ('Evaluating Text-Video retrieval on Youcook data')
-    with th.no_grad():
-        for i_batch, data in enumerate(eval_dataloader):
-            text = data['text'].cuda()
-            video = data['video'].cuda()
-            m = model(video, text)
-            metrics = compute_metrics(m.cpu().detach().numpy())
-            print_computed_metrics(metrics)
-    model.train()
 
 for epoch in range(args.epochs):
     running_loss = 0.0
     if args.eval_youcook:
-        Eval_youcook(net, dataloader_val)
+        Eval_retrieval(net, dataloader_val, 'YouCook2')
     if args.eval_msrvtt:
-        Eval_msrvtt(net, dataloader_msrvtt)
+        Eval_retrieval(net, dataloader_msrvtt, 'MSR-VTT')
     if args.eval_lsmdc:
-        Eval_lsmdc(net, dataloader_lsmdc)
+        Eval_retrieval(net, dataloader_lsmdc, 'LSMDC')
     if args.verbose:
         print('Epoch: %d' % epoch)
     for i_batch, sample_batch in enumerate(dataloader):
@@ -237,8 +212,8 @@ for epoch in range(args.epochs):
         net.save_checkpoint(path)
 
 if args.eval_youcook:
-    Eval_youcook(net, dataloader_val)
+    Eval_retrieval(net, dataloader_val, 'YouCook2')
 if args.eval_msrvtt:
-    Eval_msrvtt(net, dataloader_msrvtt)
+    Eval_retrieval(net, dataloader_msrvtt, 'MSR-VTT')
 if args.eval_lsmdc:
-    Eval_lsmdc(net, dataloader_lsmdc)
+    Eval_retrieval(net, dataloader_lsmdc, 'LSMDC')
