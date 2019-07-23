@@ -16,12 +16,12 @@ More information about HowTo100M can be found on the project webpage: https://ww
 - gensim
 
 
-# Video feature extraction
+## Video feature extraction
 
 This separate github repo: https://github.com/antoine77340/video_feature_extractor
 provides an easy to use script to extract the exact same 2D and 3D CNN features we have extracted in our work.
 
-# Downloading a pretrained model
+## Downloading a pretrained model
 This will download our pretrained text-video embedding model on HowTo100M.
 
 ```
@@ -31,7 +31,7 @@ wget https://www.rocq.inria.fr/cluster-willow/amiech/howto100m/models/howto100m_
 cd ..
 ```
 
-# Downloading meta-data for evaluation (csv, pre-extracted features for evaluation, word2vec)
+## Downloading meta-data for evaluation (csv, pre-extracted features for evaluation, word2vec)
 This will download all the data needed for evaluation.
 
 ```
@@ -39,7 +39,17 @@ wget https://www.rocq.inria.fr/cluster-willow/amiech/howto100m/metadata_eval.zip
 unzip -d metadata_eval.zip
 ```
 
-# Evaluate the HowTo100M pretrained model on MSR-VTT, YouCook2 and LSMDC
+## Downloading meta-data for training on HowTo100M (for the very brave folks :))
+This will download all the additional meta data needed for training on HowTo100M.
+
+```
+cd data
+wget https://www.rocq.inria.fr/cluster-willow/amiech/howto100m/HowTo100M.zip
+unzip -d HowTo100M.zip
+cd ..
+```
+
+## Evaluate the HowTo100M pretrained model on MSR-VTT, YouCook2 and LSMDC
 
 This command will evaluate the off-the-shelf HowTo100M pretrained model on MSR-VTT, YouCook2 and LSMDC.
 ```
@@ -49,7 +59,7 @@ python eval.py --eval_msrvtt=1 --eval_youcook=1 --eval_lsmdc=1 --num_thread_read
 Note that for MSR-VTT this will evaluate on the same test set as in JSFusion (https://arxiv.org/abs/1808.02559) work
 and that YouCook2 will be evaluated on the validation set since no test set is provided.
 
-# Fine-tune the pretrained model on MSR-VTT, YouCook2 and LSMDC
+## Fine-tune the pretrained model on MSR-VTT, YouCook2 and LSMDC
 
 To fine-tune the pretrained model on MSR-VTT, just run this:
 ```
@@ -60,7 +70,7 @@ You can also fine-tune on YouCook2 / LSMDC with the parameter --youcook=1 / --ls
 
 Same thing to monitor evaluation with the parameters --eval_msrvtt and --eval_lsmdc.
 
-# Training embedding from scratch on HowTo100M
+## Training embedding from scratch on HowTo100M
 
 If you were brave enough to download all the videos and extract 2D and 3D CNN features for them using our provided feature extractor script, we also provide you a way to train the same embedding model on HowTo100M.
 
@@ -88,12 +98,12 @@ Eventually, this command will train the model and save a checkpoint to the ckpt 
  ```
 Note that you have to replace "folder_for_2d_features" and "folder_for_3d_features" with the directory used to extract the 2d and 3d video features.
 
-# If you find the code / model useful, please cite our paper
+## If you find the code / model useful, please cite our paper
 ```
-@article{miech19howto100m,
+@inproceedings{miech19howto100m,
    title={How{T}o100{M}: {L}earning a {T}ext-{V}ideo {E}mbedding by {W}atching {H}undred {M}illion {N}arrated {V}ideo {C}lips},
    author={Miech, Antoine and Zhukov, Dimitri and Alayrac, Jean-Baptiste and Tapaswi, Makarand and Laptev, Ivan and Sivic, Josef},
-   journal={arXiv:1906.03327},
+   booktitle={ICCV},
    year={2019},
 }
 ```
