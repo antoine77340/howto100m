@@ -74,7 +74,7 @@ Same thing to monitor evaluation on other dataset with the parameters --eval_msr
 
 If you were brave enough to download all the videos and extract 2D and 3D CNN features for them using our provided feature extractor script, we also provide you a way to train the same embedding model on HowTo100M.
 
-First, you will need to extract features for all the HowTo100M videos using our 2D and 3D features extraction script: https://github.com/antoine77340/video_feature_extractor
+First, you will need to extract features for all the HowTo100M videos using our 2D and 3D features extraction script: https://github.com/antoine77340/video_feature_extractor.
 The default folder you need to extract the 2d (resp. 3d) features is in 'feature_2d' (resp. 'feature_3d'), but the default folder can be modified by changing the argument --features_path_2D (resp. --features_path_3D). After specifying the root folder for the 2d and 3d features, please use the exact same relative output path name for the features.
 
 Then, modify the training HowTo100M training CSV file (extracted in data/HowTo100M_v1.csv) by adding an additional column 'path', which points to the .npy feature path of each video you have extracted using the provided script.
@@ -95,11 +95,11 @@ Updated CSV file with features path:
 
 ```
 video_id,category_1,category_2,rank,task_id,path
-nVbIUDjzWY4,Cars & Other Vehicles,Motorcycles,27,52907, path_to_feature_vid_nVbIUDjzWY4.npy
-CTPAZ2euJ2Q,Cars & Other Vehicles,Motorcycles,35,109057, path_to_feature_vid_CTPAZ2euJ2Q.npy
+nVbIUDjzWY4,Cars & Other Vehicles,Motorcycles,27,52907, path/to/feature/vid_nVbIUDjzWY4.npy
+CTPAZ2euJ2Q,Cars & Other Vehicles,Motorcycles,35,109057, path/to/feature/vid_CTPAZ2euJ2Q.npy
 ...
-_97kyZVWVG0,Hobbies and Crafts,Crafts,34,119814, path_to_feature_vid__97kyZVWVG0.npy
-gkjnR3-ZVts,Food and Entertaining,Drinks,6,25938, path_to_feature_vid_gkjnR3-ZVts.npy
+_97kyZVWVG0,Hobbies and Crafts,Crafts,34,119814, path/to/feature/vid__97kyZVWVG0.npy
+gkjnR3-ZVts,Food and Entertaining,Drinks,6,25938, path/to/feature/vid_gkjnR3-ZVts.npy
 ```
 
 
