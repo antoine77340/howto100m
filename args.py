@@ -5,22 +5,22 @@ def get_args(description='Youtube-Text-Video'):
     parser.add_argument(
         '--train_csv',
         type=str,
-        default='/sequoia/data2/amiech/iccv19/csv/dataset_v10_1300k.csv',
+        default='data/HowTo100M_v1.csv',
         help='train csv')
     parser.add_argument(
         '--features_path_2D',
         type=str,
-        default='/local/dataset/youtube_text/2D_features',
+        default='feature_2d',
         help='feature path for 2D features')
     parser.add_argument(
         '--features_path_3D',
         type=str,
-        default='/local/dataset/youtube_text/3D_features',
+        default='feature_3d',
         help='feature path for 3D features')
     parser.add_argument(
         '--caption_path',
         type=str,
-        default='/sequoia/data2/amiech/iccv19/caption_pickle/caption_howto100m.pickle',
+        default='data/caption.pickle',
         help='caption pickle file path')
     parser.add_argument(
         '--word2vec_path',
