@@ -125,7 +125,7 @@ class Youtube_DataLoader(Dataset):
         dim = 0
         for k in self.feature_path:
             feature_path[k] = os.path.join(self.feature_path[k], vid_path)
-            video[k] = th.load(np.load(feature_path[k])).float()
+            video[k] = th.from_numpy(np.load(feature_path[k])).float()
             output[k] = th.zeros(len(s), video[k].shape[-1])
 
             for i in range(len(s)):
